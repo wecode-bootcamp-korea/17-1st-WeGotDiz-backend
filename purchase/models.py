@@ -23,11 +23,11 @@ class Order(models.Model):
     created_at        = models.DateTimeField(auto_now_add=True)
     address           = models.ForeignKey('Address', on_delete=models.PROTECT) #exists -> get or create
     order_status      = models.CharField(max_length=45, default='배송준비중')
-    reward            = models.ManyToManyField('product.Reward', through='RewardOrder', through_fields=('reward', 'order'))
+    reward            = models.ManyToManyField('product.Reward', through='RewardOrder') # through_fields=('reward', 'order') 
 
     class Meta:
         db_table = 'orders'
-    
+
 class RewardOrder(models.Model): # 펀딩하기 아이템/주문하기 - 수량 체크 펀딩
     reward      = models.ForeignKey('product.Reward', on_delete=models.PROTECT) # 내일 생각하기
     order       = models.ForeignKey('Order', on_delete=models.PROTECT) # 내일 생각하기
@@ -35,5 +35,4 @@ class RewardOrder(models.Model): # 펀딩하기 아이템/주문하기 - 수량 
 
     class Meta:
         db_table = 'rewards_orders'
-
 
