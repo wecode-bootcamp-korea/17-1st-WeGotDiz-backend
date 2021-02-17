@@ -1,5 +1,5 @@
 from django.db      import models
-# from product.models import Product
+from product.models import Product
 from user.models    import User
 
 class Comment(models.Model):
@@ -7,6 +7,7 @@ class Comment(models.Model):
     text       = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    product    = models.ForeignKey('product.Product',on_delete=models.CASCADE)
     parent     = models.ForeignKey('self', on_delete=models.CASCADE, null=True, related_name='reply')
 
     class Meta:

@@ -24,6 +24,7 @@ class Order(models.Model):
     address           = models.ForeignKey('Address', on_delete=models.PROTECT) #exists -> get or create
     order_status      = models.CharField(max_length=45, default='배송준비중')
     reward            = models.ManyToManyField('product.Reward', through='RewardOrder') # through_fields=('reward', 'order') 
+    user              = models.ForeignKey('user.User', on_delete=models.SET_NULL, null=True)
 
     class Meta:
         db_table = 'orders'
