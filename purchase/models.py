@@ -13,6 +13,7 @@ class Order(models.Model):
     fullname          = models.CharField(max_length=45) 
     contact_number    = models.CharField(max_length=20)
     delivery_note     = models.CharField(max_length=50, null=True)
+    total_amount      = models.DecimalField(max_digits=10, decimal_places=2) 
     delivery_fee      = models.DecimalField(max_digits=10, decimal_places=2, default=2500) 
     donation          = models.DecimalField(max_digits=2, decimal_places=1, null=True)
     created_at        = models.DateTimeField(auto_now_add=True)
@@ -27,7 +28,7 @@ class Order(models.Model):
 class RewardOrder(models.Model):
     reward      = models.ForeignKey('product.Reward', on_delete=models.PROTECT) 
     order       = models.ForeignKey('Order', on_delete=models.PROTECT) 
-    quantity    = models.PositiveIntegerField(default=0)
+    quantity    = models.PositiveIntegerField(default=1)
 
     class Meta:
         db_table = 'rewards_orders'

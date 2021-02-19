@@ -3,9 +3,9 @@ from django.db        import models
 class User(models.Model):
     fullname    = models.CharField(max_length=20)
     image       = models.URLField(max_length=2000)
-    email       = models.EmailField(max_length=200)
+    email       = models.EmailField(max_length=200, unique=True)
     password    = models.CharField(max_length=200)
-    maker_info  = models.ForeignKey('MakerInfo', on_delete=models.CASCADE, null=True)
+    maker_info  = models.ForeignKey('MakerInfo', on_delete=models.CASCADE, default=None, null=True)
 
     class Meta:
         db_table = 'users'
