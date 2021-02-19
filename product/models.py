@@ -7,6 +7,7 @@ from user.models       import (
 class Category(models.Model):
     name    = models.CharField(max_length=45)
     product = models.ManyToManyField('Product')
+    image   = models.URLField(max_length=2000)
 
     class Meta:
         db_table = 'categories'
@@ -19,6 +20,7 @@ class Product(models.Model): # 탭 전환 reference_table
     total_amount       = models.DecimalField(max_digits=10, decimal_places=2)
     achieved_rate      = models.DecimalField(max_digits=10, decimal_places=2)
     total_supporters   = models.IntegerField()
+    total_likes        = models.PositiveIntegerField()
     opening_date       = models.DateTimeField()
     closing_date       = models.DateTimeField()
     created_at         = models.DateTimeField(auto_now_add=True)
