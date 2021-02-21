@@ -14,9 +14,15 @@ from user.models                       import (
 from utils                             import login_decorator
 from my_settings                       import SECRET_KEY, ALGORITHM
 
-class UserView(View): 
+# funding view, like_view
+
+class UserLikeView:
     @login_decorator
-    def get(self, request): #개인회원, 일반 투자자 하드코딩 가능한지 여쭤보기
+    def get(self, request):
+
+        if not User.objects.filter(id=request.user.id):
+            return JsonResponse({"message" : "INVALID_USER"})
+        
         user = User.objects.get(id=request.user.id)
 
         information = {
@@ -27,13 +33,24 @@ class UserView(View):
             'password' : user.password,
         }
 
-class UserLikeView:
-    @login_decorator
-    def get(self, request):
         account_user   = request.user
         # like           = request.GET.get('like')
+        
+        likes = LikeUser.objects.filter(user=request.user.id) # 유저가 좋아한 상품들을 라이크유저 테이블에서 가져옴
+        like_list = [{
+            "user" : account_user.id,
+            # "product_id" : likes[0].product_id,
+            "product__title" : likes[0].product.title,
+            "product__maker_info" : likes[0].product.maker_info,
+            "product__total_amount" : likes[0].product.total_amount,
+            "product__achieved_rate" : likes[0].product.achieved_rate,
+            "product__category" :  # 카테고리 가져오기 - prefetch_related
+        }
+        for like in likes]
+        return JsonResponse({"result" : like_list}, status=200)
 
-        likes = LikeUser.objects.filter(user=request.user.id)
-        for like in likes:
+
+
+            
 
 
