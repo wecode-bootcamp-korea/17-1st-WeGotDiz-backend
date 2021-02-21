@@ -3,7 +3,7 @@ from django.db        import models
 class User(models.Model):
     fullname    = models.CharField(max_length=20)
     image       = models.URLField(max_length=2000)
-    email       = models.EmailField(max_length=200, unique=True)
+    email       = models.EmailField(max_length=200)
     password    = models.CharField(max_length=200)
     maker_info  = models.ForeignKey('MakerInfo', on_delete=models.CASCADE, default=None, null=True)
 

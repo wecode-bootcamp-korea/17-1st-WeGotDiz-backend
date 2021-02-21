@@ -1,4 +1,5 @@
 from django.db         import models
+from django.db.models.deletion import CASCADE
 from user.models       import (
     User, 
     MakerInfo
@@ -11,6 +12,10 @@ class Category(models.Model):
 
     class Meta:
         db_table = 'categories'
+
+
+    def __str__(self):
+        return f'{self.name, self.image}'
 
 class Product(models.Model): # 탭 전환 reference_table 
     title              = models.CharField(max_length=150)
@@ -27,6 +32,9 @@ class Product(models.Model): # 탭 전환 reference_table
     updated_at         = models.DateTimeField(auto_now=True)
     maker_info         = models.ForeignKey('user.MakerInfo', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f'{self.title, self.thumbnail_url, self.description, self.goal_amount, self.total_amount, self.achieved_rate, self.total_supporters, self.total_likes, self.opening_date, self.closing_date, self.maker_info}'
+    
     class Meta:
         db_table = 'products'
 
@@ -43,8 +51,8 @@ class Reward(models.Model):
 
 class Collection(models.Model):
     name       = models.CharField(max_length=45)
-    start_date = models.DateTimeField()
-    end_date   = models.DateTimeField()
+    start_date = models.DateField()
+    end_date   = models.DateField()
     product    = models.ManyToManyField('Product')
 
     class Meta:
@@ -65,3 +73,5 @@ class ProductContent(models.Model):
     class Meta:
         db_table = 'products_contents' 
     
+
+

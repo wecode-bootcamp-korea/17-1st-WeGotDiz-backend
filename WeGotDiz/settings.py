@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'WeGotDiz.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = my_settings.DATABASES
+DATABASES = my_settings.DATABASE
 
 
 # Password validation
