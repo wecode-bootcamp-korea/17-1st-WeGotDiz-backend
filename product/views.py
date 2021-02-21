@@ -12,7 +12,7 @@ from .models                  import Category, Product, Reward, Collection, Like
 class CategoryView(View):
     def get(self, request):
         try:
-            product = Product.object.all()
+            product = Product.objects.all()
             product_list = [{
                 'category_image'   : product.category_set.all()[0].image,
                 'title'            : product.title,
@@ -23,7 +23,8 @@ class CategoryView(View):
                 'closing_date'     : product.closing_date,
                 'thumbnail'        : product.thumbnail_url,
                 'category'         : product.category_set.all()[0].name,
-                'id'               : product.id
+                'id'               : product.id,
+                'maker_info_name'  : product.maker_info.name
                 } for product in product]
             return JsonResponse({"MESSAGE" : "SUCCESS", "data" : {'product'  : product_list}}, status=200)
         except KeyError:
@@ -47,7 +48,8 @@ class CategoryDetailView(View):
                 'closing_date'     : product.closing_date,
                 'thumbnail'        : product.thumbnail_url,
                 'category'         : data.name,
-                'id'               : product.id
+                'id'               : product.id,
+                'maker_info_name'  : product.maker_info.name
                 } for product in relatd_product]
             return JsonResponse({"MESSAGE" : "SUCCESS", "data" : {'product'  : product_list}}, status=200)
         except KeyError:
