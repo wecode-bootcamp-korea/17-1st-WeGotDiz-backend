@@ -1,16 +1,14 @@
 import json
-from json.decoder import JSONDecodeError
+from json.decoder  import JSONDecodeError
 import bcrypt
 import jwt
 
-from django.http                       import JsonResponse, HttpResponse
-from django.views                      import View
+from django.http   import JsonResponse, HttpResponse
+from django.views  import View
 
-from user.models                       import (
-    User
-)
+from user.models   import User
 
-from my_settings                       import SECRET_KEY, ALGORITHM
+from my_settings   import SECRET_KEY, ALGORITHM
 
 class SignInView(View):
 
@@ -18,8 +16,8 @@ class SignInView(View):
         data = json.loads(request.body)
 
         try:
-            email       = data.get('email', None)
-            password    = data.get('password', None)
+            email     = data.get('email', None)
+            password  = data.get('password', None)
 
             if not (email and password):
                 return JsonResponse({"message" : "REQUIRED_FIELD"}, status=400)
@@ -33,7 +31,7 @@ class SignInView(View):
                 
                 return JsonResponse({"message" : "UNAUTHORIZED_APPROACH"}, status=401)
             
-            return JsonResponse({"message" : "INVALID_USER"}, status=401)
+            return JsonResponse({"message" : "INVALID_USER"}, status=400)
 
         except KeyError:
             return JsonResponse({"message" : "KEY_ERROR"}, status=400)
