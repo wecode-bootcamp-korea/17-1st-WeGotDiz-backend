@@ -1,5 +1,4 @@
 from django.db         import models
-from django.db.models.deletion import CASCADE
 from user.models       import (
     User, 
     MakerInfo
@@ -32,6 +31,7 @@ class Product(models.Model): # 탭 전환 reference_table
     updated_at         = models.DateTimeField(auto_now=True)
     maker_info         = models.ForeignKey('user.MakerInfo', on_delete=models.CASCADE)
 
+
     def __str__(self):
         return f'{self.title, self.thumbnail_url, self.description, self.goal_amount, self.total_amount, self.achieved_rate, self.total_supporters, self.total_likes, self.opening_date, self.closing_date, self.maker_info}'
     
@@ -57,6 +57,9 @@ class Collection(models.Model):
 
     class Meta:
         db_table = 'collections'
+
+    def __str__(self):
+        return f'{self.name}'
 
 class LikeUser(models.Model):
     user      = models.ForeignKey('user.User', on_delete=models.CASCADE)

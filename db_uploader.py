@@ -130,15 +130,16 @@ with open(CSV_PATH) as in_file:
             name           = row[1]
             start_date     = row[2]
             end_date       = row[3]
+            product_id     = row[4]
 
             Collection.objects.create(
                     name       = name,
                     start_date = start_date,
-                    end_date   = end_date
+                    end_date   = end_date,
                     )
+            
 
-
-# Reward 파일 업로드
+# reward 업로드
 CSV_PATH = './csv/reward.csv'
 with open(CSV_PATH) as in_file:
     data_reader = csv.reader(in_file)

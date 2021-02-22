@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'WeGotDiz.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = my_settings.DATABASE
+DATABASES = my_settings.DATABASES
 
 
 # Password validation
@@ -112,7 +112,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
