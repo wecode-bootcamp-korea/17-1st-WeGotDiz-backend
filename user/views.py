@@ -1,5 +1,4 @@
 import json
-import re
 import bcrypt
 
 from django.http              import JsonResponse, HttpResponse
@@ -8,8 +7,8 @@ from django.core.validators   import validate_email
 from django.core.exceptions   import ValidationError
 
 from user.models              import User
+from user.validators          import validate_password
 
-password_regex           = re.compile(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$')
 MINIMUM_PASSWORD_LENGTH  = 8
 
 class SignUpView(View):
@@ -19,14 +18,14 @@ class SignUpView(View):
             data         = json.loads(request.body)
 
             email        = data['email']
-            fullname     = data['fullname']
+            full_name     = data['fullname']
             password     = data['password']
             maker_info   = data.get('maker_info')
 
             if User.objects.filter(email=email).exists():
                 return JsonResponse({"message" : "EMAIL_EXISTS"}, status=400)
 
-            if not (email and fullname and password):
+            if not (email and full_name and password):
                 return JsonResponse({"message" : "REQUIRED_FIELD"}, status=400)
 
             if len(password) < MINIMUM_PASSWORD_LENGTH:
@@ -34,13 +33,12 @@ class SignUpView(View):
 
             validate_email(email)
 
-            if not password_regex.search(password):
-                return JsonResponse({"message" : "INVALID_PASSWORD"}, status=400)
+            validate_password(password)
 
             hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
             User.objects.create(
-                fullname    = fullname,
+                fullname    = full_name,
                 email       = email,
                 password    = hashed_password,
                 maker_info  = maker_info
