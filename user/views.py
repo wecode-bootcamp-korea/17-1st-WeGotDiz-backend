@@ -16,29 +16,29 @@ from my_settings                       import SECRET_KEY, ALGORITHM
 # funding view, like_view
 
 class UserLikeView(View):
-    #@login_decorator
+    @login_decorator
     def get(self, request):
 
-        # if not User.objects.filter(id=request.user.id):
-        if not User.objects.filter(id=2):
+        if not User.objects.filter(id=request.user.id):
+        # if not User.objects.filter(id=2):
             return JsonResponse({"message" : "INVALID_USER"})
         
-        #user = User.objects.get(id=request.user.id)
-        user = User.objects.get(id=2)
+        user = User.objects.get(id=request.user.id)
+        # user = User.objects.get(id=2)
         information = {
-            'id' : user.id,
+            # 'id' : user.id,
             'fullname' : user.fullname,
             'email' : user.email,
-            'password' : user.password,
+            # 'password' : user.password,
             'maker_info' : user.maker_info
         }
     
 
-        # account_user   = request.user
-        account_user = User.objects.get(id=2)
+        account_user   = request.user
+        # account_user = User.objects.get(id=2)
         
-        # likes = LikeUser.objects.filter(user=request.user.id) # 유저가 좋아한 상품들을 라이크유저 테이블에서 가져옴
-        likes = LikeUser.objects.get(user=account_user)
+        likes = LikeUser.objects.filter(user=request.user.id) # 유저가 좋아한 상품들을 라이크유저 테이블에서 가져옴
+        # likes = LikeUser.objects.get(user=account_user)
 
         # print('===================================================')
         # print(likes.product.id)
@@ -70,7 +70,7 @@ class UserLikeView(View):
 
     
 
-        likes = LikeUser.objects.filter(user=2)
+        likes = LikeUser.objects.filter(user=request.user.id)
         like_list = []
 
         for like in likes:
