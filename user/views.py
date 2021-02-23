@@ -2,6 +2,7 @@ import json
 import re
 import bcrypt
 import jwt
+import datetime
 
 from django.http                       import JsonResponse, HttpResponse
 from django.views                      import View
@@ -24,10 +25,7 @@ class UserLikeView(View):
             return JsonResponse({"message" : "INVALID_USER"})
         
         user = User.objects.get(id=request.user.id)
-        fullname = user.fullname
-
-        #TOTAL FUNDING< LIKES
-            
+                    
         likes = LikeUser.objects.filter(user=request.user.id) 
 
         like_list = []
@@ -50,10 +48,27 @@ class UserLikeView(View):
                             "product_category" :  each_category
                         }
                     )
+
+                    total_funding = len(like_list)
+
+                    data = [
+                                {
+                                    "id" : user.id,
+                                    "fullname" : user.fullname
+                                }
+                            ]
         
-        return JsonResponse({"fullname" : fullname, "result" : like_list}, status=200)
+        return JsonResponse({"data" : data, "like_list" : like_list}, status=200)
 
 # http -v GET 127.0.0.1:8000/user/list "Authorization:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTF9.qUSca7Udz6mGqgfPdnrKAmldt76CiPFjrTU0g9c_qzQ"
+
+# "data": {
+#   "user_info" :   [{
+#     "id": 1,
+#     "userName":"위갓디즈",
+#     "funding_Sum":7,
+#     "like_Sum":7
+#   }]
 
 class UserFundView(View):
     # @login_decorator
@@ -64,60 +79,52 @@ class UserFundView(View):
         
         #TOTAL FUNDING< LIKES
 
-        # fundings = Order.objects.filter(user=request.user.id).prefetch_related('reward')
-        # fundings = Order.objects.filter(user=2).prefetch_related('reward')
-        # fundings = fundings.prefetch_related('product')
-
         user = User.objects.get(id=1)
+        # user = User.objects.get(id=request.user.id)
 
         funding_list = []
-        user_list = []
-
-        print(user.order_set.all())
 
         for order in user.order_set.all():
-            print('=======================================================')
-            print(order)
-            print('=======================================================')
-            for reward_order in order.rewardorder_set.all():
-                print('=======================================================')
-                print(reward_order) #RewardOrder.objects
-                print('=======================================================')
-                print(reward_order.reward.product.title)
-                print(reward_order.reward.product.achieved_rate)
-                # for reward in reward_order.reward:
-                    # print('=======================================================')
-                    # print(reward) #Reward.objects
-                    # print('=======================================================')
-                    # for product in reward.product.all(): 
-                    #     user_list.append(product.title)
+            #order objects
+            for reward in order.reward.all():
+                closing_date = datetime.datetime.today() - reward.product.closing_date
+                #reward objects
+                funding_list = [
+                    {
+                        "product_image" : reward.product.thumbnail_url,
+                        "product_date_countdown" : closing_date.days,
+                        "product_total_amount" : reward.product.total_amount,
+                        "product_achieved_rate" : reward.product.achieved_rate,
+                        "product_title" : reward.product.title,
+                        "product_maker_info" : reward.product.maker_info.name,
+                        "product_category" : reward.product.category_set.all()[0].name,
+                    }
+                ]
 
-        # for reward in product.reward_set.all():
-        #     for reward_order in reward.rewardorder_set.all():
-        #         user_list.append(reward_order.order.user)
+                total_funding = len(funding_list)
 
-        print(user_list)
+                data = [
+                                {
+                                    "id" : user.id,
+                                    "fullname" : user.fullname
+                                }
+                            ]
 
-        return JsonResponse({"user_list" : user_list}, status=200)
-
-        # user = User.objects.get(id=request.user.id)
-        # fullname = user.fullname 
-
-
-
-        # for funding in fundings:
-        #     funding_list.append(
-        #         {
-        #             "fullname" : funding.fullname,
-        #             "product_title": funding.title 
-        #         }
-        #     )
-
-
-        #return JsonResponse({"fullname" : fullname, "result" : funding_list}, status=200)
-
+                return JsonResponse({"data" : data, "result" : funding_list}, status=200)
 
         
+        # http -v GET 127.0.0.1:8000/user/fundinglist
+
+# class UserInfoView(View):
+#     @login_decorator  
+#     def get(self, request, product_id): 
+#         user  = request.user
+#         user_info = {
+#             'email' = user.email,
+#             'name' = user.fullname
+#         }
+#     return JsonResponse({'user_info' : user_info}, status=200)
+     
 
 
 
