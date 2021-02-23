@@ -1,5 +1,8 @@
 import json
 import bcrypt
+import jwt
+
+from json.decoder  import JSONDecodeError
 
 from django.http              import JsonResponse, HttpResponse
 from django.views             import View
@@ -8,6 +11,7 @@ from django.core.exceptions   import ValidationError
 
 from user.models              import User
 from user.validators          import validate_password
+from my_settings              import SECRET_KEY, ALGORITHM
 
 MINIMUM_PASSWORD_LENGTH  = 8
 
@@ -51,3 +55,29 @@ class SignUpView(View):
 
         except ValidationError:
             return JsonResponse({"message" : "VALIDATION_ERROR"}, status=400)
+
+class SignInView(View):
+
+    def post(self, request):
+        data = json.loads(request.body)
+
+        try:
+            email     = data.get('email', None)
+            password  = data.get('password', None)
+
+            if not (email and password):
+                return JsonResponse({"message" : "REQUIRED_FIELD"}, status=400)
+
+            if not User.objects.filter(email=email):
+                return JsonResponse({"message" : "INVALID_USER"}, status=401)
+
+            user = User.objects.get(email=email)
+
+            if bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
+                access_token = jwt.encode({"id" : user.id}, SECRET_KEY, algorithm=ALGORITHM)
+                return JsonResponse({"message" : "SUCCESS", "TOKEN" : access_token}, status=200)
+
+            return JsonResponse({"message" : "UNAUTHORIZED_APPROACH"}, status=401)
+
+        except KeyError:
+            return JsonResponse({"message" : "KEY_ERROR"}, status=400)
