@@ -49,8 +49,7 @@ class UserLikeView(View):
                         }
                     )
 
-                    total_funding = len(like_list)
-
+                    # 한번에 드리기 -> data + list 작업 수행해라 허민지여... 
                     data = [
                                 {
                                     "id" : user.id,
@@ -66,8 +65,6 @@ class UserLikeView(View):
 #   "user_info" :   [{
 #     "id": 1,
 #     "userName":"위갓디즈",
-#     "funding_Sum":7,
-#     "like_Sum":7
 #   }]
 
 class UserFundView(View):
@@ -82,15 +79,17 @@ class UserFundView(View):
         user = User.objects.get(id=1)
         # user = User.objects.get(id=request.user.id)
 
-        funding_list = []
+        data = []
 
         for order in user.order_set.all():
             #order objects
             for reward in order.reward.all():
                 closing_date = datetime.datetime.today() - reward.product.closing_date
                 #reward objects
-                funding_list = [
+                data = [
                     {
+                        "id" : user.id,
+                        "fullname" : user.fullname,
                         "product_image" : reward.product.thumbnail_url,
                         "product_date_countdown" : closing_date.days,
                         "product_total_amount" : reward.product.total_amount,
@@ -100,15 +99,6 @@ class UserFundView(View):
                         "product_category" : reward.product.category_set.all()[0].name,
                     }
                 ]
-
-                total_funding = len(funding_list)
-
-                data = [
-                                {
-                                    "id" : user.id,
-                                    "fullname" : user.fullname
-                                }
-                            ]
 
                 return JsonResponse({"data" : data, "result" : funding_list}, status=200)
 
