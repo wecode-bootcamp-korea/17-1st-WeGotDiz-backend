@@ -24,12 +24,18 @@ class UserLikeView(View):
             return JsonResponse({"message" : "INVALID_USER"})
         
         user = User.objects.get(id=request.user.id)
+
+        user_info = [
+            {
+                "id"            : user.id,
+                "userName"      : user.fullname
+            }
+        ]
                     
-        likes = LikeUser.objects.filter(user=request.user.id)
+        likes = LikeUser.objects.filter(user=1)
+        # likes = LikeUser.objects.filter(user=request.user.id)
         
-        data = [{
-            "id"                    : user.id,
-            "fullname"              : user.fullname,
+        like_list = [{
             "product_id"            : like.product.id,
             "product_title"         : like.product.title,
             "product_image"         : like.product.thumbnail_url,
@@ -40,7 +46,7 @@ class UserLikeView(View):
 
         } for like in likes]
         
-        return JsonResponse({"mypage_data" : data}, status=200)
+        return JsonResponse({"data" : {'user_info' : user_info, 'like_list' : like_list}}, status=200)
 
 class UserFundView(View):
     @login_decorator
@@ -49,12 +55,17 @@ class UserFundView(View):
             return JsonResponse({"message" : "INVALID_USER"})
         
         user = User.objects.get(id=request.user.id)
+
+        user_info = [
+            {
+                "id"            : user.id,
+                "userName"      : user.fullname
+            }
+        ]
         
-        data = [
+        funding_list = [
             
             {
-                "id"                     : user.id,
-                "fullname"               : user.fullname,
                 "product_image"          : reward.product.thumbnail_url,
                 "product_date_countdown" : str((datetime.datetime.today() - reward.product.closing_date).days),
                 "product_total_amount"   : reward.product.total_amount,
@@ -66,7 +77,7 @@ class UserFundView(View):
             for order in user.order_set.all()
             for reward in order.reward.all()]
 
-        return JsonResponse({"mypage_data" : data}, status=200)
+        return JsonResponse({"data" : {'user_info' : user_info, 'funding_list' : funding_list}}, status=200)
 
 class UserInfoView(View):
     @login_decorator  
