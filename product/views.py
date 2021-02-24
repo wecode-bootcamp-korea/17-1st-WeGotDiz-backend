@@ -18,14 +18,12 @@ class ProductDetailView(View):
     def get(self, request, product_id):
 
         try:
-            tab = request.GET.get('tab', '스토리')
-
-            product = Product.objects.get(id=product_id)    
-            today    = datetime.datetime.today()
+            tab          = request.GET.get('tab', '스토리')
+            product      = Product.objects.get(id=product_id)    
+            today        = datetime.datetime.today()
             closing_date = product.closing_date
 
             results = {
-
                 "id"            : product.id,
                 "category"      : product.category_set.first().name,
                 "title"         : product.title,
@@ -42,7 +40,7 @@ class ProductDetailView(View):
                         "total_supporters" : product.total_supporters
                     },
                 "total_likes"   : product.total_likes,
-                "tab"           : product.productcontent_set.get(name=tab).content, #html
+                "tab"           : product.productcontent_set.get(name=tab).content,
                 "maker_name"    : product.maker_info.name,
                 "maker_image"   : product.maker_info.user_set.first().image,
                 "levels"  : [
@@ -59,9 +57,8 @@ class ProductDetailView(View):
                         "level" : product.maker_info.popularity_level
                     }
                 ]
-
             }
-
+            
             return JsonResponse( {'data' : results}, status = 200 )
 
         except KeyError:
