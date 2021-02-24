@@ -46,6 +46,7 @@ class Collection(models.Model):
     start_date = models.DateTimeField()
     end_date   = models.DateTimeField()
     product    = models.ManyToManyField('Product')
+    image_url    = models.URLField(max_length=2000)
 
     class Meta:
         db_table = 'collections'
