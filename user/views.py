@@ -18,14 +18,17 @@ from my_settings                       import SECRET_KEY, ALGORITHM
 # funding view, like_view
 
 class UserLikeView(View):
-    @login_decorator
+    # @login_decorator
     def get(self, request):
-        if not User.objects.filter(id=request.user.id):
+        if not User.objects.filter(id=1):
+        # if not User.objects.filter(id=request.user.id):
             return JsonResponse({"message" : "INVALID_USER"})
         
-        user = User.objects.get(id=request.user.id)
+        # user = User.objects.get(id=request.user.id)
+        user = User.objects.get(id=1)
                     
-        likes = LikeUser.objects.filter(user=request.user.id)
+        # likes = LikeUser.objects.filter(user=request.user.id)
+        likes = LikeUser.objects.filter(user=1)
         
         data = [{
             "id"                    : user.id,
@@ -43,12 +46,14 @@ class UserLikeView(View):
         return JsonResponse({"mypage_data" : data}, status=200)
 
 class UserFundView(View):
-    @login_decorator
+    # @login_decorator
     def get(self, request):
-        if not User.objects.filter(id=request.user.id):
+        if not User.objects.filter(id=1):
+        # if not User.objects.filter(id=request.user.id):
             return JsonResponse({"message" : "INVALID_USER"})
         
-        user = User.objects.get(id=request.user.id)
+        # user = User.objects.get(id=request.user.id)
+        user = User.objects.get(id=1)
         
         data = [
             
@@ -58,7 +63,7 @@ class UserFundView(View):
                 "product_image"          : reward.product.thumbnail_url,
                 "product_date_countdown" : str((datetime.datetime.today() - reward.product.closing_date).days),
                 "product_total_amount"   : reward.product.total_amount,
-                "producst_achieved_rate"  : reward.product.achieved_rate,
+                "product_achieved_rate"  : reward.product.achieved_rate,
                 "product_title"          : reward.product.title,
                 "product_maker_info"     : reward.product.maker_info.name,
                 "product_category"       : [category.name for category in reward.product.category_set.all()]
