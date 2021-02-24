@@ -18,17 +18,14 @@ from my_settings                       import SECRET_KEY, ALGORITHM
 # funding view, like_view
 
 class UserLikeView(View):
-    # @login_decorator
+    @login_decorator
     def get(self, request):
-        if not User.objects.filter(id=1):
-        # if not User.objects.filter(id=request.user.id):
+        if not User.objects.filter(id=request.user.id):
             return JsonResponse({"message" : "INVALID_USER"})
         
-        # user = User.objects.get(id=request.user.id)
-        user = User.objects.get(id=1)
+        user = User.objects.get(id=request.user.id)
                     
-        # likes = LikeUser.objects.filter(user=request.user.id)
-        likes = LikeUser.objects.filter(user=1)
+        likes = LikeUser.objects.filter(user=request.user.id)
         
         data = [{
             "id"                    : user.id,
@@ -46,14 +43,12 @@ class UserLikeView(View):
         return JsonResponse({"mypage_data" : data}, status=200)
 
 class UserFundView(View):
-    # @login_decorator
+    @login_decorator
     def get(self, request):
-        if not User.objects.filter(id=1):
-        # if not User.objects.filter(id=request.user.id):
+        if not User.objects.filter(id=request.user.id):
             return JsonResponse({"message" : "INVALID_USER"})
         
-        # user = User.objects.get(id=request.user.id)
-        user = User.objects.get(id=1)
+        user = User.objects.get(id=request.user.id)
         
         data = [
             
