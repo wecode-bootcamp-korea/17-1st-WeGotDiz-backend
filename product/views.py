@@ -9,16 +9,9 @@ from my_settings      import SECRET_KEY, ALGORITHM
 from user.utils       import login_decorator
 from user.models      import User, MakerInfo
 from .models          import  (
-    Category,
-    Product,
-    Reward,
-    LikeUser,
-    ProductContent,
-    Collection
-
+    Category, Product, Reward,
+    LikeUser, ProductContent, Collection
 )
-
-
 
 class ProductDetailView(View):
     
@@ -75,7 +68,6 @@ class ProductDetailView(View):
             return JsonResponse( {'message' : "INVALID_KEY"}, status = 400 )
 
 
-
 class LikeView(View):
 
     @login_decorator
@@ -86,45 +78,30 @@ class LikeView(View):
             product     = Product.objects.get(id=product_id)
             total_likes = product.total_likes
 
-            LikeUser.objects.create(product_id = product_id, user_id = user_id)
+            if LikeUser.objects.filter(product_id=product_id, user_id=user_id).exists():
+                LikeUser.objects.get(product_id=product_id, user_id=user_id).delete()
+                Product.objects.filter(id=product_id).update(total_likes = total_likes - 1)
 
+                return JsonResponse({'message':'SUCCESS'}, status=204)
+
+            LikeUser.objects.create(product_id=product_id, user_id=user_id)
             Product.objects.filter(id=product_id).update(total_likes = total_likes + 1)
-
-            return JsonResponse({'message':'SUCCESS', 'data': product.total_likes}, status=201)
+            
+            return JsonResponse({'message':'SUCCESS', 'total_likes': total_likes}, status=201)
 
         except KeyError: 
-            return JsonResponse( {'message':'INVALID_REQUEST'}, status=400 )
-
-
-
-    @login_decorator
-    def delete(self, request, product_id):
-
-        try:
-            user_id     = request.user.id
-            product     = Product.objects.get(id=product_id)
-            total_likes = product.total_likes
-
-            LikeUser.objects.filter(product_id=product_id, user_id=user_id).delete()
-            Product.objects.filter(id=product_id).update(total_likes = total_likes - 1)
-
-            return HttpResponse( status = 204 )
-        
-        except KeyError:
-            return JsonResponse( {'message': 'INVALID_REQUEST'}, status = 400 )
-
+            return JsonResponse({'message':'KEY_ERROR', 'total_likes': total_likes}, status=400)
 
 
 class CollectionView(View):
 
     def get(self, request):
         try:
-            collection_count = Collection.objects.count()
-            result           = []
+            collections = Collection.objects.all()
+            result      = []
     
-            for i in range( 1, collection_count + 1 ):
-                collection = Collection.objects.get(id=i)
-                projects   = collection.product.all()
+            for collection in collections:
+                projects = collection.product.all()[:2]
 
                 planData = [
                     {
@@ -138,7 +115,7 @@ class CollectionView(View):
                                 "category" : project.category_set.first().name,
                                 "img"      : project.thumbnail_url
                             } 
-                            for i, project in enumerate(projects) if i <= 1
+                            for project in projects
                         ]
                     }
                 ]
