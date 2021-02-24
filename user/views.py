@@ -11,7 +11,7 @@ from django.core.exceptions   import ValidationError
 
 from user.models              import User
 from user.validators          import validate_password
-from my_settings              import SECRET_KEY, ALGORITHM
+from my_settings              import SECRET_KEY
 
 MINIMUM_PASSWORD_LENGTH  = 8
 
