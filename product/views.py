@@ -22,11 +22,8 @@ class ProductListView(View):
         products = Product.objects.filter() if category_id == 0 \
             else Product.objects.filter(category__id=category_id)
 
-        category = Category.objects.filter().first() if category_id == 0\
-                else Category.objects.filter(product__id=category_id).first()
-        
         product_list = [{
-            'category_image'   : category.image,
+            'category_image'   : [category.image for category in product.category_set.all()],
             'title'            : product.title,
             'goal_amout'       : product.goal_amount,
             'toal_amount'      : product.total_amount,
@@ -34,12 +31,10 @@ class ProductListView(View):
             'total_supporters' : product.total_supporters,
             'closing_date'     : str((product.closing_date - today).days),
             'thumbnail'        : product.thumbnail_url,
-            'category'         : category.name,
-            'category_id'      : category.id,
+            'category'         : [category.name for category in product.category_set.all()],
+            'category_id'      : [category.id for category in product.category_set.all()],
             'id'               : product.id,
             'maker_info_name'  : product.maker_info.name,
             } for product in products]
         
         return JsonResponse({"MESSAGE" : "SUCCESS", "DATA" : product_list}, status=200)
-
-
