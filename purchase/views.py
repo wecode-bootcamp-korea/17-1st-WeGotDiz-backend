@@ -84,9 +84,6 @@ class RewardOrderView(View):
                 quantity   = reward['quantity']
                 reward_obj = Reward.objects.get(id=reward['id'])
 
-                except MultipleObjectsReturned:
-                    reward_obj = Reward.objects.filter(id=reward['id'])[0]
-
                 reward_order = RewardOrder.objects.create(
                     reward   = reward_obj,
                     order    = order,
