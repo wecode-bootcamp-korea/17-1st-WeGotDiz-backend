@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 import json
 from datetime         import date, datetime 
 
@@ -176,4 +174,3 @@ class MainView(View):
             
         except:
             raise Http404
->>>>>>> 905d93f2f515526447b3313e371e3c669fa8e59f
