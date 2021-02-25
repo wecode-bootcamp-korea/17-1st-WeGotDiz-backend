@@ -138,7 +138,7 @@ class MainView(View):
                 'title'            : product.title,
                 'goal_amout'       : product.goal_amount,
                 'toal_amount'      : product.total_amount,
-                'achieved_rate'    : product.achieved_rate *36,
+                'achieved_rate'    : product.achieved_rate,
                 'total_supporters' : product.total_supporters,
                 'closing_date'     : str((product.closing_date - today).days),
                 'thumbnail'        : product.thumbnail_url,
@@ -160,7 +160,7 @@ class MainView(View):
                             {
                                 "id"       : project.id,
                                 "text"     : project.title,
-                                "percent"  : project.achieved_rate * 36,
+                                "percent"  : project.achieved_rate,
                                 "category" : project.category_set.first().name,
                                 "img"      : project.thumbnail_url
                             } 
