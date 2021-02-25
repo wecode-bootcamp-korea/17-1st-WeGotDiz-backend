@@ -5,3 +5,4 @@ urlpatterns = [
     path('product', include('product.urls')),
     path('product/<int:product_id>/purchase', include('purchase.urls')),
 ]
+
