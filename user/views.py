@@ -91,7 +91,6 @@ class SignInView(View):
 class UserLikeView(View):
     @login_decorator
     def get(self, request):
-
         user_info = [
             {
                 "id"            : request.user.id,
@@ -117,7 +116,6 @@ class UserLikeView(View):
 class UserFundView(View):
     @login_decorator
     def get(self, request):
-
         user_info = [
             {
                 "id"            : request.user.id,

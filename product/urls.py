@@ -1,5 +1,4 @@
 from django.urls import path, include
-
 from user.views import SignInView, SignUpView
 from .views      import (
     ProductDetailView, LikeView, MainView
