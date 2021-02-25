@@ -1,12 +1,9 @@
 import json
 import re
-import bcrypt
-import jwt
 import datetime
 
 from django.http                       import JsonResponse, HttpResponse
 from django.views                      import View
-from django.db.models                  import Q
 
 from user.models                       import User
 from product.models                    import Product, LikeUser, Reward
@@ -31,9 +28,8 @@ class UserLikeView(View):
                 "userName"      : user.fullname
             }
         ]
-                    
-        likes = LikeUser.objects.filter(user=1)
-        # likes = LikeUser.objects.filter(user=request.user.id)
+        
+        likes = LikeUser.objects.filter(user=request.user.id)
         
         like_list = [{
             "product_id"            : like.product.id,
