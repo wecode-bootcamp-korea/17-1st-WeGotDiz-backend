@@ -1,7 +1,13 @@
 from django.urls import path, include
-from .views      import ProductListView 
+
+from user.views import SignInView, SignUpView
+from .views      import (
+    ProductDetailView, LikeView, MainView
+)
 
 urlpatterns = [
-    path('/main', ProductListView.as_view()),    
-    path('/main/<int:category_id>', ProductListView.as_view()),
+    path('/<int:product_id>', ProductDetailView.as_view()),
+    path('/<int:product_id>/like', LikeView.as_view()),
+    path('/main', MainView.as_view()),
+    path('/main/<int:category_id>', MainView.as_view())
 ]
