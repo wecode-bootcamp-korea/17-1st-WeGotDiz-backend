@@ -91,15 +91,11 @@ class SignInView(View):
 class UserLikeView(View):
     @login_decorator
     def get(self, request):
-        if not User.objects.filter(id=request.user.id):
-            return JsonResponse({"message" : "INVALID_USER"})
-        
-        user = User.objects.get(id=request.user.id)
 
         user_info = [
             {
-                "id"            : user.id,
-                "userName"      : user.fullname
+                "id"            : request.user.id,
+                "userName"      : request.user.fullname
             }
         ]
         
@@ -121,20 +117,15 @@ class UserLikeView(View):
 class UserFundView(View):
     @login_decorator
     def get(self, request):
-        if not User.objects.filter(id=request.user.id):
-            return JsonResponse({"message" : "INVALID_USER"})
-        
-        user = User.objects.get(id=request.user.id)
 
         user_info = [
             {
-                "id"            : user.id,
-                "userName"      : user.fullname
+                "id"            : request.user.id,
+                "userName"      : request.user.fullname
             }
         ]
-        
-        funding_list = [
-            
+    
+        funding_list = [ 
             {
                 "product_image"          : reward.product.thumbnail_url,
                 "product_date_countdown" : str((datetime.datetime.today() - reward.product.closing_date.replace(tzinfo=None)).days),
@@ -152,9 +143,8 @@ class UserFundView(View):
 class UserInfoView(View):
     @login_decorator  
     def get(self, request, product_id): 
-        user  = request.user
         user_info = {
-            'email' : user.email,
-            'name' : user.fullname
+            'email' : request.user.email,
+            'name' : request.user.fullname
         }
         return JsonResponse({'user_info' : user_info}, status=200)

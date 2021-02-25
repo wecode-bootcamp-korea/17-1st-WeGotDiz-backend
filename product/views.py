@@ -80,7 +80,7 @@ class LikeView(View):
                 LikeUser.objects.get(product_id=product_id, user_id=user_id).delete()
                 Product.objects.filter(id=product_id).update(total_likes = total_likes - 1)
 
-                return JsonResponse({'message':'SUCCESS'}, status=204)
+                return JsonResponse({'message':'SUCCESS', 'total_likes': total_likes}, status=204)
 
             LikeUser.objects.create(product_id=product_id, user_id=user_id)
             Product.objects.filter(id=product_id).update(total_likes = total_likes + 1)
@@ -88,7 +88,7 @@ class LikeView(View):
             return JsonResponse( {'message':'SUCCESS', 'total_likes': total_likes}, status=201 )
 
         except KeyError: 
-            return JsonResponse( {'message':'KEY_ERROR', 'total_likes': total_likes}, status=400)
+            return JsonResponse( {'message':'KEY_ERROR'}, status=400)
 
 
 class MainView(View):
@@ -134,7 +134,7 @@ class MainView(View):
                 'title'            : product.title,
                 'goal_amout'       : product.goal_amount,
                 'toal_amount'      : product.total_amount,
-                'achieved_rate'    : product.achieved_rate *36,
+                'achieved_rate'    : product.achieved_rate,
                 'total_supporters' : product.total_supporters,
                 'closing_date'     : str((product.closing_date - today).days),
                 'thumbnail'        : product.thumbnail_url,
@@ -156,7 +156,7 @@ class MainView(View):
                             {
                                 "id"       : project.id,
                                 "text"     : project.title,
-                                "percent"  : project.achieved_rate * 36,
+                                "percent"  : project.achieved_rate,
                                 "category" : project.category_set.first().name,
                                 "img"      : project.thumbnail_url
                             } 
