@@ -20,9 +20,9 @@ class Product(models.Model): # 탭 전환 reference_table
     title              = models.CharField(max_length=150)
     thumbnail_url      = models.URLField(max_length=2000)
     description        = models.TextField()
-    goal_amount        = models.DecimalField(max_digits=10, decimal_places=2)
-    total_amount       = models.DecimalField(max_digits=10, decimal_places=2)
-    achieved_rate      = models.DecimalField(max_digits=10, decimal_places=2)
+    goal_amount        = models.DecimalField(max_digits=20, decimal_places=2)
+    total_amount       = models.DecimalField(max_digits=20, decimal_places=2)
+    achieved_rate      = models.DecimalField(max_digits=20, decimal_places=2)
     total_supporters   = models.IntegerField()
     total_likes        = models.PositiveIntegerField()
     opening_date       = models.DateTimeField()
@@ -53,6 +53,7 @@ class Collection(models.Model):
     name       = models.CharField(max_length=45)
     start_date = models.DateField()
     end_date   = models.DateField()
+    image_url  = models.URLField(max_length=2000)
     product    = models.ManyToManyField('Product')
 
     class Meta:
