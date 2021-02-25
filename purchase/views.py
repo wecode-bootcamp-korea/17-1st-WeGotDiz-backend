@@ -17,7 +17,7 @@ class RewardListView(View):
     def get(self, request, product_id): 
         user  = request.user
 
-        product = Product.objects.get(id=product_id)
+        product = Product.objects.get(id=product_id) 
         rewards = Reward.objects.filter(product=product)
         
         product_info = {
@@ -59,7 +59,7 @@ class RewardOrderView(View):
                 return JsonResponse({"message" : "REQUIRED_FIELD"}, status=400)
                 
             if not Product.objects.filter(id=product_id).exists():
-                return JsonResponse({'message':'PRODUCT_NOT_FOUND'}, status=404)
+                return JsonResponse({'message' : 'PRODUCT_NOT_FOUND'}, status=404)
 
             product      = Product.objects.get(id=product_id)
             address_list = Address.objects.filter(user_id=user.id)
