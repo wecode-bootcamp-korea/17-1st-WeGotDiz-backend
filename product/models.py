@@ -75,12 +75,5 @@ class ProductContent(models.Model):
     product     = models.ForeignKey('Product', on_delete=models.CASCADE)
 
     class Meta:
-<<<<<<< HEAD
         db_table = 'products_contents'
-    
-=======
-        db_table = 'products_contents' 
-    
 
-
->>>>>>> 905d93f2f515526447b3313e371e3c669fa8e59f
