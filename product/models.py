@@ -53,7 +53,7 @@ class Collection(models.Model):
     name       = models.CharField(max_length=45)
     start_date = models.DateField()
     end_date   = models.DateField()
-    image_url  = models.URLField(max_length=2000)
+    image_url  = models.URLField(max_length=2000, null=True)
     product    = models.ManyToManyField('Product')
 
     class Meta:

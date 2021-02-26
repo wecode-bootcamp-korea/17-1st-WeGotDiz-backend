@@ -55,7 +55,7 @@ class RewardOrderView(View):
             address        = data.get('address')
             total_amount   = data['total_price']
 
-            if not address or contact_number:
+            if not address and not contact_number:
                 return JsonResponse({"message" : "REQUIRED_FIELD"}, status=400)
                 
             if not Product.objects.filter(id=product_id).exists():
