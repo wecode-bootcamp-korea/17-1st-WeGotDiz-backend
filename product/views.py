@@ -197,7 +197,7 @@ class MainView(View):
                 'maker_info_name'  : product.maker_info.name,
                 } for product in products
             ]
-        
+
             for collection in collections:
                 projects = collection.product.all()[:2]
                 planData = [

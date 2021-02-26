@@ -133,7 +133,7 @@ class UserFundView(View):
                 "product_maker_info"     : reward.product.maker_info.name,
                 "product_category"       : [category.name for category in reward.product.category_set.all()]
             }
-            for order in user.order_set.all()
+            for order in request.user.order_set.all()
             for reward in order.reward.all()]
 
         return JsonResponse({"data" : {'user_info' : user_info, 'funding_list' : funding_list}}, status=200)
