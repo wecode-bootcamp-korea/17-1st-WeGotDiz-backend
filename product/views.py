@@ -16,6 +16,7 @@ from .models          import  (
     LikeUser, ProductContent, Collection
 )
 
+
 class ProductDetailView(View):
     
     def get(self, request, product_id):
@@ -66,6 +67,65 @@ class ProductDetailView(View):
             raise Http404
 
 
+class UserProductDetailView(View):
+    
+    @login_decorator
+    def get(self, request, product_id):
+        
+        try:
+            tab          = request.GET.get('tab', '스토리')
+            product      = Product.objects.get(id=product_id)
+            total_likes  = product.total_likes
+            closing_date = product.closing_date
+            user_id      = request.user.id   
+            today        = datetime.today()
+            
+            liked = True
+            if LikeUser.objects.filter(product_id=product_id, user_id=user_id).exists():
+                liked = False
+            
+            results      = {
+                "id"            : product.id,
+                "category"      : product.category_set.first().name,
+                "title"         : product.title,
+                "tab_names"     : [content.name for content in product.productcontent_set.all()],
+                "thumbnail_url" : product.thumbnail_url,
+                "description"   : product.description,
+                "goal_amount"   : product.goal_amount,
+                "opening_date"  : product.opening_date,
+                "closing_date"  : closing_date,
+                "days_left"     : str((closing_date - today).days),
+                "info_box"      : {
+                        "achieved_rate"    : product.achieved_rate,
+                        "total_amount"     : product.total_amount,
+                        "total_supporters" : product.total_supporters
+                    },
+                "total_likes"   : product.total_likes,
+                "tab"           : product.productcontent_set.get(name=tab).content,
+                "maker_name"    : product.maker_info.name,
+                "maker_image"   : product.maker_info.user_set.first().image,
+                "levels"        : [
+                    { 
+                        "name"  : "평판",
+                        "level" : product.maker_info.reputation_level
+                    },
+                    { 
+                        "name"  : "소통",
+                        "level" : product.maker_info.communication_level
+                    },
+                    { 
+                        "name"  : "인기",
+                        "level" : product.maker_info.popularity_level
+                    }
+                ],
+                "liked"         : liked
+            }
+            return JsonResponse( {'data' : results}, status = 200 )
+
+        except:
+            raise Http404 
+
+
 class LikeView(View):
 
     @login_decorator
@@ -80,7 +140,7 @@ class LikeView(View):
                 LikeUser.objects.get(product_id=product_id, user_id=user_id).delete()
                 Product.objects.filter(id=product_id).update(total_likes = total_likes - 1)
 
-                return JsonResponse({'message':'SUCCESS', 'total_likes': total_likes}, status=204)
+                return JsonResponse({'message':'SUCCESS', 'total_likes': total_likes}, status=200)
 
             LikeUser.objects.create(product_id=product_id, user_id=user_id)
             Product.objects.filter(id=product_id).update(total_likes = total_likes + 1)
@@ -96,11 +156,10 @@ class MainView(View):
     def get(self, request, category_id=0):
       
         try:
-
             ordering = request.GET.get('order', 'recommend')
-            endYN = request.GET.get('endYN',1)
+            endYN    = request.GET.get('endYN',1)
+            q        = Q()
 
-            q = Q()
             if endYN == '2':
                 q &= Q(closing_date__gt=datetime.today())
 
@@ -118,15 +177,9 @@ class MainView(View):
             if ordering == 'price':
                 products = products.order_by('-total_amount')
 
-            if category_id == 0:
-                products = products.filter()
-
-            else:
-                products = products.filter(category__id=category_id).all()
-
+            products = products.filter() if category_id == 0 else products.filter(category__id=category_id).all()
             today       = datetime.today()
             collections = Collection.objects.all()
-            
             result      = []
             
             product_list = [{
