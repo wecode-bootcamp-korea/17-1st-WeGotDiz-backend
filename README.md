@@ -71,9 +71,13 @@
 <br>
 <br>
 
+
 최호진<br>
-1.위갓디즈 Aquery 작성<br> 2.작성한 Aqeury를 기반으로 한 전체 modeling 구현<br> 3.db_uploader.py에서 many to many 관계의 데이터가 바르게 들어가도록 수정 <br> 4.결제 페이지의 프로덕트(product)의 상품(reward) 리스트 반환 기능 구현<br> 5.배송지, 핸드폰 번호 등 사용자의 정보가 입력되고 결제 가능하도록 구현<br> 6.결제된 내역에 따라 프로덕트(product)의 총 펀딩된 금액과 총 팔린 리워드 수량 업데이트 기능 구현<br>
+1.위갓디즈 Aquery 작성<br> 2.작성한 Aqeury를 기반으로 한 전체 modeling 구현<br> 3.db_uploader.py에서 many to many 관계의 데이터가 바르게 들어가도록 수정 <br> 4.결제 페이지의 프로덕트(product)의 상품(reward) 리스트 반환 기능 구현<br> 5.배송지, 핸드폰 번호 등 사용자의 정보가 입력되고 결제 가능하도록 구현<br> 6.결제된 내역에 따라 프로덕트(product)의 총 펀딩된 금액과 총 팔린 리워드 수량 업데이트 기능 구현
 <br>
+<br>
+
+
 ---
 
 ## 회고록
