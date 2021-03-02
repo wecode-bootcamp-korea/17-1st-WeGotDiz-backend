@@ -28,7 +28,7 @@
 
 ## Stack
 -front-end : HTML / CSS / JavaScript / React / CRA / React DOM / React Router DOM / Sass / Slick / RESTfulAPI
--back-end : PYTHON / Django / bycyrpt / pyjwt / RESTfulAPI / Aquery Tool / MYSQL / coreheader
+-back-end : PYTHON / Django / bycyrpt / pyjwt / RESTfulAPI / Aquery Tool / MYSQL / corsheaders
 -communication tool : Figma / Notion / Slack / Trello / Git / GitHub / Zoom / Google Meet
 
 ---
